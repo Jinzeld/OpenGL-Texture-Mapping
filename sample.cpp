@@ -462,7 +462,42 @@ Display( )
 
 	glEnable( GL_NORMALIZE );
 
-	//code
+	if (TextureMode) {
+        glEnable(GL_TEXTURE_2D);
+    } else {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    // Set the texture env to MODULATE so lighting affects the texture color
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    // Set moving point light (example uses Time to animate)
+    float lightPos[4];
+    float radius = 5.0f;
+    float angle = Time * 2.0f * M_PI; // Time in [0,1)
+    lightPos[0] = radius * cos(angle);
+    lightPos[1] = 2.0f;                 // some height
+    lightPos[2] = radius * sin(angle);
+    lightPos[3] = 1.0f;                 // positional light
+    SetPointLight(GL_LIGHT0, lightPos[0], lightPos[1], lightPos[2], 1.0f);
+
+    // Draw the current object
+    switch (WhichObject) {
+        case 0: glCallList(SphereDL); break;
+        case 1: glCallList(CubeDL); break;
+        case 2: glCallList(CylinderDL); break;
+        case 3: glCallList(ConeDL); break;
+        case 4: glCallList(TorusDL); break;
+        case 5: glCallList(ObjDL); break;
+    }
+
+    // cleanup state
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
+
 
 	glutSwapBuffers( );
 
