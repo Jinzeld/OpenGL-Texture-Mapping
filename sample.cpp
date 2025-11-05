@@ -159,14 +159,17 @@ const GLfloat Colors[ ][3] =
 
 // --------------Globsl Variables------------------
 
+GLuint SphereDL, CubeDL, CylinderDL, ConeDL, TorusDL, ObjDL;
+GLuint SphereTex, CubeTex, CylinderTex, ConeTex, TorusTex, ObjTex;
+int WhichObject = 0;        // 0..5
+bool TextureMode = true;    
+float Time = 0.0f;
+const int MS_PER_CYCLE = 5000;
 
 // for lighting:
 
 const float	WHITE[ ] = { 1.,1.,1.,1. };
 
-// for animation:
-
-const int MS_PER_CYCLE = 10000;		// 10000 milliseconds = 10 seconds
 
 
 // what options should we compile-in?
