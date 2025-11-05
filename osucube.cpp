@@ -1,5 +1,8 @@
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
-
+#endif
 struct vertex
 {
 	float	position[3];
