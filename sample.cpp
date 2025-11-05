@@ -363,21 +363,11 @@ main( int argc, char *argv[ ] )
 //
 // do not call Display( ) from here -- let glutPostRedisplay( ) do it
 
-void
-Animate( )
-{
-	// put animation stuff in here -- change some global variables for Display( ) to find:
-
-	int ms = glutGet(GLUT_ELAPSED_TIME);
-	ms %= MS_PER_CYCLE;							// makes the value of ms between 0 and MS_PER_CYCLE-1
-	Time = (float)ms / (float)MS_PER_CYCLE;		// makes the value of Time between 0. and slightly less than 1.
-
-	// for example, if you wanted to spin an object in Display( ), you might call: glRotatef( 360.f*Time,   0., 1., 0. );
-
-	// force a call to Display( ) next time it is convenient:
-
-	glutSetWindow( MainWindow );
-	glutPostRedisplay( );
+void Animate() {
+    int ms = glutGet(GLUT_ELAPSED_TIME);
+    ms %= MS_PER_CYCLE;
+    Time = (float)ms / (float)MS_PER_CYCLE; // [0,1)
+    glutPostRedisplay();
 }
 
 
