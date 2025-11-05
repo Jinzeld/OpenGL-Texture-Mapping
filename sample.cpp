@@ -370,6 +370,17 @@ void Animate() {
     glutPostRedisplay();
 }
 
+void SetPointLight(GLenum light, float x, float y, float z, float w) {
+    GLfloat position[4] = {x, y, z, w};
+    GLfloat ambient[4]  = {0.1f, 0.1f, 0.1f, 1.0f};
+    GLfloat diffuse[4]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    glLightfv(light, GL_POSITION, position);
+    glLightfv(light, GL_AMBIENT, ambient);
+    glLightfv(light, GL_DIFFUSE, diffuse);
+    glLightfv(light, GL_SPECULAR, specular);
+}
 
 // draw the complete scene:
 
