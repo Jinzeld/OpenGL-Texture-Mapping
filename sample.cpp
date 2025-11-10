@@ -641,6 +641,27 @@ ElapsedSeconds( )
 	return (float)ms / 1000.f;
 }
 
+void MakeTextureFromBMP(const char *filename, GLuint &texName) {
+    int width, height;
+    unsigned char *texture = BmpToTexture((char*)filename, &width, &height);
+    if (texture == NULL) {
+        fprintf(stderr, "Cannot open texture '%s'\n", filename);
+        texName = 0;
+        return;
+    }
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+
+    delete[] texture;
+}
+
 // initialize the glut and OpenGL libraries:
 //	also setup callback functions
 
