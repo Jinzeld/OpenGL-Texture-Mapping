@@ -770,6 +770,56 @@ InitGraphics( )
 
 void InitLists( ) {
 
+   // Sphere
+    SphereDL = glGenLists(1);
+    glNewList(SphereDL, GL_COMPILE);
+   		SetMaterial(0.5f, 0.5f, 0.5f, 30.0f);
+        glBindTexture(GL_TEXTURE_2D, SphereTex);
+        OsuSphere(1.0, 64, 64);
+    glEndList();
+
+    // Cube
+    CubeDL = glGenLists(1);
+    glNewList(CubeDL, GL_COMPILE);
+        SetMaterial( 0.5f, 0.5f, 0.5f, 30.0f);
+        glBindTexture(GL_TEXTURE_2D, CubeTex);
+        OsuCube(1.0);
+    glEndList();
+
+    // Cylinder
+    CylinderDL = glGenLists(1);
+    glNewList(CylinderDL, GL_COMPILE);
+        SetMaterial(0.5f, 0.5f, 0.5f, 30.0f);
+        glBindTexture(GL_TEXTURE_2D, CylinderTex);
+        OsuCylinder(1.0f, 2.0f, 32, 16); 
+    glEndList();
+
+    // Cone
+    ConeDL = glGenLists(1);
+    glNewList(ConeDL, GL_COMPILE);
+        SetMaterial(0.5f, 0.5f, 0.5f, 30.0f);
+        glBindTexture(GL_TEXTURE_2D, ConeTex);
+        OsuCone(1.0f, 0.0f, 2.0f, 32, 16); 
+    glEndList();
+
+    // Torus
+    TorusDL = glGenLists(1);
+    glNewList(TorusDL, GL_COMPILE);
+        SetMaterial(0.5f, 0.5f, 0.5f, 30.0f);
+        glBindTexture(GL_TEXTURE_2D, TorusTex);
+        OsuTorus(0.4, 1.0, 64, 64);
+    glEndList();
+
+	// Obj Model
+    GLuint dl = LoadObjMtlFiles((char *)"./obj/dino.obj");
+    ObjDL = glGenLists(1);
+    glNewList(ObjDL, GL_COMPILE);
+        SetMaterial(0.5f, 0.5f, 0.5f, 30.0f);
+		glScalef(0.2f, 0.2f, 0.2f);
+        glBindTexture(GL_TEXTURE_2D, ObjTex);
+		glCallList(dl);
+    glEndList();
+
     // Axes remain the same
     AxesList = glGenLists(1);
     glNewList(AxesList, GL_COMPILE);
