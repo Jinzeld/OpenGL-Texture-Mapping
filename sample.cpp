@@ -163,8 +163,8 @@ GLuint SphereDL, CubeDL, CylinderDL, ConeDL, TorusDL, ObjDL;
 GLuint SphereTex, CubeTex, CylinderTex, ConeTex, TorusTex, ObjTex;
 int WhichObject = 0;        // 0..5
 bool TextureMode = true;    
-float Time = 0.0f;
 const int MS_PER_CYCLE = 5000;
+GLuint dl; 
 
 // for lighting:
 
@@ -302,14 +302,14 @@ TimeOfDaySeed( )
 
 // these are here for when you need them -- just uncomment the ones you need:
 
-//#include "setmaterial.cpp"
-//#include "setlight.cpp"
-//#include "osusphere.cpp"
-//#include "osucube.cpp"
-//#include "osucylindercone.cpp"
-//#include "osutorus.cpp"
-//#include "bmptotexture.cpp"
-//#include "loadobjmtlfiles.cpp"
+#include "setmaterial.cpp"
+#include "setlight.cpp"
+#include "osusphere.cpp"
+#include "osucube.cpp"
+#include "osucylindercone.cpp"
+#include "osutorus.cpp"
+#include "bmptotexture.cpp"
+#include "loadobjmtlfiles.h"
 //#include "keytime.cpp"
 //#include "glslprogram.cpp"
 //#include "vertexbufferobject.cpp"
@@ -370,18 +370,6 @@ void Animate() {
     glutPostRedisplay();
 }
 
-void SetPointLight(GLenum light, float x, float y, float z, float w) {
-    GLfloat position[4] = {x, y, z, w};
-    GLfloat ambient[4]  = {0.1f, 0.1f, 0.1f, 1.0f};
-    GLfloat diffuse[4]  = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-    glLightfv(light, GL_POSITION, position);
-    glLightfv(light, GL_AMBIENT, ambient);
-    glLightfv(light, GL_DIFFUSE, diffuse);
-    glLightfv(light, GL_SPECULAR, specular);
-}
-
 // draw the complete scene:
 
 void
@@ -427,7 +415,7 @@ Display( )
 	if( NowProjection == ORTHO )
 		glOrtho( -2.f, 2.f,     -2.f, 2.f,     0.1f, 1000.f );
 	else
-		gluPerspective( 70.f, 1.f,	0.1f, 1000.f );
+		gluPerspective( 90.f, 1.f,	0.1f, 1000.f );
 
 	// place the objects into the scene:
 
@@ -474,24 +462,22 @@ Display( )
     // Set the texture env to MODULATE so lighting affects the texture color
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-    // Set moving point light (example uses Time to animate)
-    float lightPos[4];
+    // Set moving point light 
     float radius = 5.0f;
-    float angle = Time * 2.0f * M_PI; // Time in [0,1)
-    lightPos[0] = radius * cos(angle);
-    lightPos[1] = 2.0f;                 // some height
-    lightPos[2] = radius * sin(angle);
-    lightPos[3] = 1.0f;                 // positional light
-    SetPointLight(GL_LIGHT0, lightPos[0], lightPos[1], lightPos[2], 1.0f);
+	float lx = radius * cosf(Time * 2.0f * M_PI);
+	float ly = 2.0f; 
+	float lz = radius * sinf(Time * 2.0f * M_PI);
+    SetPointLight(GL_LIGHT0, lx, ly, lz, 1.0f, 0.9f, 0.8f);
 
     // Draw the current object
     switch (WhichObject) {
-        case 0: glCallList(SphereDL); break;
-        case 1: glCallList(CubeDL); break;
-        case 2: glCallList(CylinderDL); break;
-        case 3: glCallList(ConeDL); break;
-        case 4: glCallList(TorusDL); break;
-        case 5: glCallList(ObjDL); break;
+		default: glCallList(SphereDL); break;
+        case 1: glCallList(SphereDL); break;
+        case 2: glCallList(CubeDL); break;
+        case 3: glCallList(CylinderDL); break;
+        case 4: glCallList(ConeDL); break;
+        case 5: glCallList(TorusDL); break;
+		case 6: glCallList(ObjDL); break;
     }
 
     // cleanup state
@@ -655,8 +641,6 @@ ElapsedSeconds( )
 	return (float)ms / 1000.f;
 }
 
-
-
 // initialize the glut and OpenGL libraries:
 //	also setup callback functions
 
@@ -734,7 +718,6 @@ InitGraphics( )
 
 	glutIdleFunc( Animate );
 
-	// init the glew package (a window must be open to do this):
 
 #ifdef WIN32
 	GLenum err = glewInit( );
@@ -758,8 +741,6 @@ InitGraphics( )
 //  with a call to glCallList( )
 
 void InitLists( ) {
-
-	//code
 
     // Axes remain the same
     AxesList = glGenLists(1);
@@ -843,8 +824,21 @@ Keyboard( unsigned char c, int x, int y )
 	if( DebugOn != 0 )
 		fprintf( stderr, "Keyboard: '%c' (0x%0x)\n", c, c );
 
+	if (c >= '1' && c <= '6') {
+        WhichObject = c - '0';
+        glutPostRedisplay();
+        return;
+    }
+
 	switch( c )
 	{
+		case 'a': case 'A':
+			AxesOn = !AxesOn;
+			break;
+		case 't': case 'T':
+            TextureMode = !TextureMode;
+            glutPostRedisplay();
+			break;
 		case 'o':
 		case 'O':
 			NowProjection = ORTHO;
