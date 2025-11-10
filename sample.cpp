@@ -739,6 +739,13 @@ InitGraphics( )
 
 	glutIdleFunc( Animate );
 
+	// bmp files
+	MakeTextureFromBMP("./bmp/spheretex.bmp", SphereTex);
+	MakeTextureFromBMP("./bmp/cubetex.bmp", CubeTex);
+	MakeTextureFromBMP("./bmp/cyltex.bmp", CylinderTex);
+	MakeTextureFromBMP("./bmp/conetex.bmp", ConeTex);
+	MakeTextureFromBMP("./bmp/torustex.bmp", TorusTex);
+	MakeTextureFromBMP("./bmp/objtex.bmp", ObjTex);
 
 #ifdef WIN32
 	GLenum err = glewInit( );
